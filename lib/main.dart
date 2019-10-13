@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 void main() {
   runApp(MaterialApp(
-    home: Item(),
+    home: Login(),
     debugShowCheckedModeBanner: false,
   ));
 }
@@ -29,19 +29,31 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _entrar() {}
+  void _entrar(email, senha) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => AddItem()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text("NAJA",
-            style: TextStyle(fontSize: 30, fontFamily: "Arial Black")),
+            style: TextStyle(
+              fontSize: 30,
+              fontFamily: "Arial Black",
+              color: Colors.orange,
+            )),
         centerTitle: true,
         backgroundColor: Colors.black,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.orange,
+            ),
             onPressed: _resetFields,
           )
         ],
@@ -91,12 +103,12 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _entrar();
+                        _entrar(emailController, passwordController);
                       }
                     },
                     child: Text(
                       "Entrar",
-                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                      style: TextStyle(color: Colors.orange, fontSize: 25.0),
                     ),
                     color: Colors.black,
                   ),
@@ -141,7 +153,7 @@ class _AddItemState extends State<AddItem> {
     });
   }
 
-  void _cadastrar() {}
+  void _cadastrar(nome, valor, quantidade, imagem) {}
 
   void _showMenu() {}
 
@@ -150,16 +162,26 @@ class _AddItemState extends State<AddItem> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: Icon(
+            Icons.menu,
+            color: Colors.orange,
+          ),
           onPressed: _showMenu,
         ),
         title: Text("NAJA",
-            style: TextStyle(fontSize: 30, fontFamily: "Arial Black")),
+            style: TextStyle(
+              fontSize: 30,
+              fontFamily: "Arial Black",
+              color: Colors.orange,
+            )),
         centerTitle: true,
         backgroundColor: Colors.black,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.orange,
+            ),
             onPressed: _resetFields,
           )
         ],
@@ -240,12 +262,13 @@ class _AddItemState extends State<AddItem> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _cadastrar();
+                        _cadastrar(nomeController, valorController,
+                            quantidadeController, imageController);
                       }
                     },
                     child: Text(
                       "Cadastrar Item",
-                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                      style: TextStyle(color: Colors.orange, fontSize: 25.0),
                     ),
                     color: Colors.black,
                   ),
@@ -277,15 +300,12 @@ class _ItemState extends State<Item> {
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  String _infoText = "Informe os dados do Item!";
-
   void _resetFields() {
     nomeController.text = "";
     valorController.text = "";
     imageController.text = "";
     quantidadeController.text = "";
     setState(() {
-      _infoText = "Informe os dados do Item!";
       _formKey = GlobalKey<FormState>();
     });
   }
@@ -299,16 +319,26 @@ class _ItemState extends State<Item> {
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.menu),
+          icon: Icon(
+            Icons.menu,
+            color: Colors.orange,
+          ),
           onPressed: _showMenu,
         ),
         title: Text("NAJA",
-            style: TextStyle(fontSize: 30, fontFamily: "Arial Black")),
+            style: TextStyle(
+              fontSize: 30,
+              fontFamily: "Arial Black",
+              color: Colors.orange,
+            )),
         centerTitle: true,
         backgroundColor: Colors.black,
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.refresh),
+            icon: Icon(
+              Icons.refresh,
+              color: Colors.orange,
+            ),
             onPressed: _resetFields,
           )
         ],
@@ -394,27 +424,53 @@ class _ItemState extends State<Item> {
                     },
                     child: Text(
                       "Cadastrar Item",
-                      style: TextStyle(color: Colors.white, fontSize: 25.0),
+                      style: TextStyle(color: Colors.orange, fontSize: 25.0),
                     ),
                     color: Colors.black,
                   ),
                 ),
               ),
-              Text(
-                _infoText,
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 25.0),
-              )
             ],
           ),
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
-        tooltip: 'Editar Item',
-        child: const Icon(Icons.mode_edit),
+      bottomNavigationBar: BottomNavigationBar(
+        items: <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: IconButton(
+              icon: Icon(
+                Icons.mode_edit,
+                color: Colors.orange,
+              ),
+              onPressed: () {},
+            ),
+            title: Text(
+              "Editar",
+              style: TextStyle(color: Colors.orange),
+            ),
+          ),
+          BottomNavigationBarItem(
+            icon: IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.delete_outline,
+                color: Colors.orange,
+              ),
+            ),
+            title: Text(
+              "Excluir",
+              style: TextStyle(color: Colors.orange),
+            ),
+          ),
+        ],
         backgroundColor: Colors.black,
       ),
+      // floatingActionButton: FloatingActionButton(
+      // onPressed: () => {},
+      //tooltip: 'Editar Item',
+      //child: const Icon(Icons.mode_edit),
+      //backgroundColor: Colors.black,
+      //),
     );
   }
 }
