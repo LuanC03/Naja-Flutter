@@ -1,35 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:todo/menu.dart';
 
 class ItemView extends StatefulWidget {
   var _id;
-  ItemView(num id) {
-    _id = id;
-  }
+  var _nome;
+  var _quantidade;
+  var _preco;
+  var _img;
 
+  ItemView(id, nome, quantidade, preco, img) {
+    this._img = img;
+    this._id = id;
+    this._quantidade = quantidade;
+    this._preco = preco;
+    this._nome = nome;
+  }
   @override
-  State<StatefulWidget> createState() => _ItemViewState();
+  State<StatefulWidget> createState() => _ItemViewState(
+      this._id, this._nome, this._quantidade, this._preco, this._img);
 }
 
 class _ItemViewState extends State<ItemView> {
-  var id = widget._id;
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  var _id;
+  var _nome;
+  var _quantidade;
+  var _preco;
+  var _img;
 
-  void _resetFields() {
-    nomeController.text = "";
-    valorController.text = "";
-    imageController.text = "";
-    quantidadeController.text = "";
-    setState(() {
-      _formKey = GlobalKey<FormState>();
-    });
+  _ItemViewState(id, nome, quantidade, preco, img) {
+    this._img = img;
+    this._id = id;
+    this._quantidade = quantidade;
+    this._preco = preco;
+    this._nome = nome;
   }
 
-  void _cadastrar(nome, valor, imagem, quantidade) {}
+  void _showMenu() {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Menu()),
+    );
+  }
 
-  void _showMenu() {}
+  BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
+    this._context = context;
     return Scaffold(
       appBar: AppBar(
         leading: IconButton(
@@ -47,106 +64,15 @@ class _ItemViewState extends State<ItemView> {
             )),
         centerTitle: true,
         backgroundColor: Colors.black,
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(
-              Icons.refresh,
-              color: Colors.orange,
-            ),
-            onPressed: _resetFields,
-          )
-        ],
       ),
       backgroundColor: Colors.orange,
-      body: SingleChildScrollView(
-        padding: EdgeInsets.fromLTRB(10.0, 0.0, 10.0, 0.0),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: <Widget>[
-              Icon(Icons.fiber_new, size: 120.0, color: Colors.black),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    labelText: "Digite o Nome do Item",
-                    labelStyle: TextStyle(color: Colors.black)),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 25.0),
-                controller: nomeController,
-                validator: (nomeItem) {
-                  if (nomeItem.isEmpty) {
-                    return "Insira o Nome do Item!";
-                  }
-                },
-              ), //
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: "Digite o Valor do Item",
-                    labelStyle: TextStyle(color: Colors.black)),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 25.0),
-                controller: valorController,
-                validator: (valorItem) {
-                  if (valorItem.isEmpty) {
-                    return "Insira o Valor do Item!";
-                  } else if (double.parse(valorItem) <= 0) {
-                    return "Insira um Valor Valido!";
-                  }
-                },
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: InputDecoration(
-                    labelText: "Digite a Quantidade do Item",
-                    labelStyle: TextStyle(color: Colors.black)),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 25.0),
-                controller: quantidadeController,
-                validator: (quantidadeItem) {
-                  if (quantidadeItem.isEmpty) {
-                    return "Insira o Quantidade do Item!";
-                  } else if (double.parse(quantidadeItem) <= 0) {
-                    return "Insira uma Quantidade Valido!";
-                  }
-                },
-              ),
-              TextFormField(
-                keyboardType: TextInputType.text,
-                decoration: InputDecoration(
-                    labelText: "Digite o Imagem do Item",
-                    labelStyle: TextStyle(color: Colors.black)),
-                textAlign: TextAlign.center,
-                style: TextStyle(color: Colors.black, fontSize: 25.0),
-                controller: imageController,
-                validator: (imageItem) {
-                  if (imageItem.isEmpty) {
-                    return "Insira a Imagem do Item!";
-                  }
-                },
-              ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Container(
-                  height: 50.0,
-                  child: RaisedButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _cadastrar(nomeController, valorController,
-                            imageController, quantidadeController);
-                      }
-                    },
-                    child: Text(
-                      "Cadastrar Item",
-                      style: TextStyle(color: Colors.orange, fontSize: 25.0),
-                    ),
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-            ],
-          ),
+      body: new Container(
+        width: 700,
+        height: 600,
+        child: new Material(
+          borderRadius: new BorderRadius.circular(6.0),
+          elevation: 2.0,
+          child: _getListTile(),
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
@@ -180,12 +106,118 @@ class _ItemViewState extends State<ItemView> {
         ],
         backgroundColor: Colors.black,
       ),
-      // floatingActionButton: FloatingActionButton(
-      // onPressed: () => {},
-      //tooltip: 'Editar Item',
-      //child: const Icon(Icons.mode_edit),
-      //backgroundColor: Colors.black,
-      //),
     );
+  }
+
+  Widget _getListTile() {
+    // Foi adicionado dentro de Container para adicionar altura fixa.
+    return new Material(
+      borderRadius: new BorderRadius.circular(6.0),
+      elevation: 2.0,
+      child: new Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          new Container(
+            child: FadeInImage.assetNetwork(
+              placeholder: '',
+              image: _img,
+              fit: BoxFit.cover,
+              width: 250.0,
+              height: 250.0,
+            ),
+            padding: EdgeInsets.fromLTRB(0.0, 10.0, 0.0, 0.0),
+          ),
+          _getColumText(_nome, _quantidade, _preco),
+        ],
+      ),
+      color: _getCorFundo(_quantidade),
+    );
+  }
+}
+
+Widget _getColumText(nome, quantidade, preco) {
+  return new Expanded(
+      child: new Container(
+    margin: new EdgeInsets.all(10.0),
+    child: new Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: <Widget>[
+        _getNomeWidget(nome, quantidade),
+        _getQuantidadeWidget(quantidade),
+        _getPrecoWidget(preco, quantidade)
+      ],
+    ),
+  ));
+}
+
+Widget _getNomeWidget(String curencyName, String quantidade) {
+  return new Container(
+    child: new Text(
+      curencyName,
+      maxLines: 1,
+      style: new TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 50.0,
+          color: _getCorLetra(quantidade)),
+    ),
+  );
+}
+
+Widget _getPrecoWidget(String preco, String quantidade) {
+  String precoFormatado = 'R\$ ' + preco;
+  return new Container(
+    margin: new EdgeInsets.only(top: 5.0),
+    child: new Text(
+      precoFormatado,
+      style: new TextStyle(fontSize: 40.0, color: _getCorLetra(quantidade)),
+    ),
+  );
+}
+
+Widget _getQuantidadeWidget(String quantidade) {
+  String quantidadeFormatada = quantidade + " unidades";
+  return new Text(
+    quantidadeFormatada,
+    style: new TextStyle(color: _getCorLetra(quantidade), fontSize: 30.0),
+  );
+}
+
+_getCorFundo(quantidade) {
+  int qtd = int.parse(quantidade);
+  if (qtd == 0) {
+    return Colors.red;
+  } else if (qtd > 0 && qtd <= 10) {
+    return Colors.yellow;
+  } else {
+    return Colors.black;
+  }
+}
+
+_getCorLetra(String quantidade) {
+  int qtd = int.parse(quantidade);
+  if (qtd > 0 && qtd <= 10) {
+    return Colors.black;
+  } else {
+    return Colors.white;
+  }
+}
+
+_getCorBotao(quantidade) {
+  int qtd = int.parse(quantidade);
+  if (qtd == 0) {
+    return Colors.black;
+  } else if (qtd > 0 && qtd <= 10) {
+    return Colors.black;
+  } else {
+    return Colors.orange;
+  }
+}
+
+_getCorLetraBotao(quantidade) {
+  int qtd = int.parse(quantidade);
+  if (qtd <= 10) {
+    return Colors.orange;
+  } else {
+    return Colors.black;
   }
 }

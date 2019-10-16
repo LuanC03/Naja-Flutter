@@ -1,30 +1,3 @@
-/*class Item {
-  String name;
-  String qtdStock;
-  String image;
-  String valor;
-  String category;
-
-  Item({this.name, this.qtdStock, this.image, this.valor, this.category});
-
-  Item.fromJson(Map<String, dynamic> json) {
-    name = json['name'];
-    qtdStock = json['qtdStock'];
-    image = json['image'];
-    valor = json['valor'];
-    category = json['category'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['name'] = this.name;
-    data['qtdStock'] = this.qtdStock;
-    data['image'] = this.image;
-    data['valor'] = this.valor;
-    data['category'] = this.category;
-    return data;
-  }
-}*/
 import 'package:flutter/material.dart';
 import 'package:todo/itemView.dart';
 
@@ -72,21 +45,38 @@ class Item extends StatelessWidget {
             width: 95.0,
             height: 95.0,
           ),
-          _getColumText(_id, _nome, _quantidade, _preco),
+          _getColumText(_nome, _quantidade, _preco),
+          RaisedButton(
+            onPressed: () {
+              Navigator.push(
+                _context,
+                MaterialPageRoute(
+                    builder: (_context) =>
+                        ItemView(_id, _nome, _quantidade, _preco, _img)),
+              );
+            },
+            child: Text(
+              "Ver Item",
+              style: TextStyle(
+                  color: _getCorLetraBotao(_quantidade), fontSize: 18.0),
+            ),
+            color: _getCorBotao(_quantidade),
+            padding: EdgeInsets.fromLTRB(5.0, 5.0, 5, 5.0),
+          ),
         ],
       ),
       color: _getCorFundo(_quantidade),
     );
   }
 
-  Widget _getColumText(id, nome, quantidade, preco) {
+  Widget _getColumText(nome, quantidade, preco) {
     return new Expanded(
         child: new Container(
       margin: new EdgeInsets.all(10.0),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getNomeWidget(_id, _nome, _quantidade),
+          _getNomeWidget(_nome, _quantidade),
           _getQuantidadeWidget(_quantidade),
           _getPrecoWidget(_preco, _quantidade)
         ],
@@ -94,7 +84,7 @@ class Item extends StatelessWidget {
     ));
   }
 
-  Widget _getNomeWidget(num id, String curencyName, String quantidade) {
+  Widget _getNomeWidget(String curencyName, String quantidade) {
     return new Row(
       children: <Widget>[
         new Text(
@@ -105,19 +95,6 @@ class Item extends StatelessWidget {
               fontSize: 20.0,
               color: _getCorLetra(quantidade)),
         ),
-        RaisedButton(
-          onPressed: () {
-            Navigator.push(
-              _context,
-              MaterialPageRoute(builder: (_context) => ItemView(id)),
-            );
-          },
-          child: Text(
-            "Entrar",
-            style: TextStyle(color: Colors.orange, fontSize: 25.0),
-          ),
-          color: Colors.black,
-        )
       ],
     );
   }
@@ -158,6 +135,26 @@ class Item extends StatelessWidget {
       return Colors.black;
     } else {
       return Colors.white;
+    }
+  }
+
+  _getCorBotao(quantidade) {
+    int qtd = int.parse(quantidade);
+    if (qtd == 0) {
+      return Colors.black;
+    } else if (qtd > 0 && qtd <= 10) {
+      return Colors.black;
+    } else {
+      return Colors.orange;
+    }
+  }
+
+  _getCorLetraBotao(quantidade) {
+    int qtd = int.parse(quantidade);
+    if (qtd <= 10) {
+      return Colors.orange;
+    } else {
+      return Colors.black;
     }
   }
 }

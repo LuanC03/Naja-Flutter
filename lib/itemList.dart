@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:todo/ItemApi.dart';
+import 'package:todo/menu.dart';
 import 'package:todo/models/item.dart';
 
 class ItemList extends StatefulWidget {
@@ -19,9 +20,19 @@ class _ItemListPageState extends State<ItemList> {
     return new Scaffold(
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.orange,
+          icon: IconButton(
+            icon: Icon(
+              Icons.menu,
+              color: Colors.orange,
+            ),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => Menu(),
+                ),
+              );
+            },
           ),
           onPressed: _showMenu,
         ),

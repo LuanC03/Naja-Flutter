@@ -26,10 +26,7 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _entrar(email, senha) {
-    //_usuario = new Usuario(email, senha, '');
-    //print(_usuario.getEmail() + " ta indo");
-    //print(_usuario.getSenha());
+  void _entrar() {
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => ItemList()),
@@ -103,10 +100,7 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        print(emailController.text);
-                        print(passwordController.text);
-                        _entrar(emailController.value.toString(),
-                            passwordController.value.toString());
+                        _entrar();
                       }
                     },
                     child: Text(
