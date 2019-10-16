@@ -1,11 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:todo/itemView.dart';
 
 class ItemEdit extends StatefulWidget {
+  var _id;
+  var _nome;
+  var _quantidade;
+  var _preco;
+  var _img;
+
+  ItemEdit(id, nome, quantidade, preco, img) {
+    this._img = img;
+    this._id = id;
+    this._quantidade = quantidade;
+    this._preco = preco;
+    this._nome = nome;
+    print(_nome);
+  }
+
   @override
-  State<StatefulWidget> createState() => _ItemEditState();
+  State<StatefulWidget> createState() => _ItemEditState(
+      this._id, this._nome, this._quantidade, this._preco, this._img);
 }
 
 class _ItemEditState extends State<ItemEdit> {
+  var _id;
+  var _nome;
+  var _quantidade;
+  var _preco;
+  var _img;
+
+  _ItemEditState(id, nome, quantidade, preco, img) {
+    this._img = img;
+    this._id = id;
+    this._quantidade = quantidade;
+    this._preco = preco;
+    this._nome = nome;
+  }
+
   TextEditingController nomeController = TextEditingController();
   TextEditingController valorController = TextEditingController();
   TextEditingController imageController = TextEditingController();
@@ -14,30 +45,19 @@ class _ItemEditState extends State<ItemEdit> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _resetFields() {
-    nomeController.text = "";
-    valorController.text = "";
-    imageController.text = "";
-    quantidadeController.text = "";
+    nomeController.text = '';
+    valorController.text = '';
+    imageController.text = '';
+    quantidadeController.text = '';
     setState(() {
       _formKey = GlobalKey<FormState>();
     });
   }
 
-  void _cadastrar(nome, valor, imagem, quantidade) {}
-
-  void _showMenu() {}
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.orange,
-          ),
-          onPressed: _showMenu,
-        ),
         title: Text("NAJA",
             style: TextStyle(
               fontSize: 30,
@@ -125,25 +145,7 @@ class _ItemEditState extends State<ItemEdit> {
                   }
                 },
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                child: Container(
-                  height: 50.0,
-                  child: RaisedButton(
-                    onPressed: () {
-                      if (_formKey.currentState.validate()) {
-                        _cadastrar(nomeController, valorController,
-                            imageController, quantidadeController);
-                      }
-                    },
-                    child: Text(
-                      "Cadastrar Item",
-                      style: TextStyle(color: Colors.orange, fontSize: 25.0),
-                    ),
-                    color: Colors.black,
-                  ),
-                ),
-              ),
+              Divider(),
             ],
           ),
         ),
@@ -153,38 +155,54 @@ class _ItemEditState extends State<ItemEdit> {
           BottomNavigationBarItem(
             icon: IconButton(
               icon: Icon(
-                Icons.mode_edit,
+                Icons.save,
                 color: Colors.orange,
               ),
-              onPressed: () {},
+              onPressed: () {
+                _salvarEdicao(nomeController.text, valorController.text,
+                    imageController.text, quantidadeController.text, _id);
+              },
             ),
             title: Text(
-              "Editar",
+              "Salvar",
               style: TextStyle(color: Colors.orange),
             ),
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _cancelarEdicao();
+              },
               icon: Icon(
-                Icons.delete_outline,
+                Icons.do_not_disturb,
                 color: Colors.orange,
               ),
             ),
             title: Text(
-              "Excluir",
+              "Cancelar",
               style: TextStyle(color: Colors.orange),
             ),
           ),
         ],
         backgroundColor: Colors.black,
       ),
-      // floatingActionButton: FloatingActionButton(
-      // onPressed: () => {},
-      //tooltip: 'Editar Item',
-      //child: const Icon(Icons.mode_edit),
-      //backgroundColor: Colors.black,
-      //),
     );
+  }
+
+  void _cancelarEdicao() {
+    Navigator.pop(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ItemView(_id, _nome, _quantidade, _preco, _img),
+      ),
+    );
+  }
+
+  void _salvarEdicao(
+      String nome, String valor, String img, String quantidade, id) {
+    print(nome);
+    print(valor);
+    print(img);
+    print(quantidade);
   }
 }

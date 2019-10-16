@@ -13,29 +13,12 @@ class ItemList extends StatefulWidget {
 class _ItemListPageState extends State<ItemList> {
   List _news = new List();
   var repository = new ItensApi();
-  void _showMenu() {}
 
   @override
   Widget build(BuildContext context) {
     return new Scaffold(
+      drawer: Menu(),
       appBar: AppBar(
-        leading: IconButton(
-          icon: IconButton(
-            icon: Icon(
-              Icons.menu,
-              color: Colors.orange,
-            ),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => Menu(),
-                ),
-              );
-            },
-          ),
-          onPressed: _showMenu,
-        ),
         title: Text("NAJA",
             style: TextStyle(
               fontSize: 30,

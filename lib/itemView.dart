@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:todo/itemEdit.dart';
+import 'package:todo/itemList.dart';
 import 'package:todo/menu.dart';
 
 class ItemView extends StatefulWidget {
@@ -35,27 +37,14 @@ class _ItemViewState extends State<ItemView> {
     this._nome = nome;
   }
 
-  void _showMenu() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Menu()),
-    );
-  }
-
   BuildContext _context;
 
   @override
   Widget build(BuildContext context) {
     this._context = context;
     return Scaffold(
+      drawer: Menu(),
       appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.menu,
-            color: Colors.orange,
-          ),
-          onPressed: _showMenu,
-        ),
         title: Text("NAJA",
             style: TextStyle(
               fontSize: 30,
@@ -64,11 +53,24 @@ class _ItemViewState extends State<ItemView> {
             )),
         centerTitle: true,
         backgroundColor: Colors.black,
+        actions: <Widget>[
+          FlatButton(
+            child: Text(
+              "Voltar",
+              style: TextStyle(
+                fontSize: 20,
+                color: Colors.orange,
+              ),
+            ),
+            onPressed: _voltar,
+          )
+        ],
       ),
       backgroundColor: Colors.orange,
       body: new Container(
-        width: 700,
-        height: 600,
+        padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+        width: 600,
+        height: 500,
         child: new Material(
           borderRadius: new BorderRadius.circular(6.0),
           elevation: 2.0,
@@ -83,7 +85,9 @@ class _ItemViewState extends State<ItemView> {
                 Icons.mode_edit,
                 color: Colors.orange,
               ),
-              onPressed: () {},
+              onPressed: () {
+                _editarItem(_id, _nome, _quantidade, _preco, _img);
+              },
             ),
             title: Text(
               "Editar",
@@ -92,7 +96,9 @@ class _ItemViewState extends State<ItemView> {
           ),
           BottomNavigationBarItem(
             icon: IconButton(
-              onPressed: () {},
+              onPressed: () {
+                _excluirItem(_id);
+              },
               icon: Icon(
                 Icons.delete_outline,
                 color: Colors.orange,
@@ -133,6 +139,23 @@ class _ItemViewState extends State<ItemView> {
       color: _getCorFundo(_quantidade),
     );
   }
+
+  void _voltar() {
+    Navigator.pop(
+      context,
+      MaterialPageRoute(builder: (context) => ItemList()),
+    );
+  }
+
+  void _editarItem(id, nome, quantidade, preco, img) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+          builder: (context) => ItemEdit(id, nome, quantidade, preco, img)),
+    );
+  }
+
+  void _excluirItem(id) {}
 }
 
 Widget _getColumText(nome, quantidade, preco) {
