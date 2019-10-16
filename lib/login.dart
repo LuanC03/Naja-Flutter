@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:todo/addItem.dart';
+import 'package:todo/itemList.dart';
+import 'package:todo/models/user.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -9,6 +11,7 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  Usuario _usuario;
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -24,9 +27,12 @@ class _LoginState extends State<Login> {
   }
 
   void _entrar(email, senha) {
+    //_usuario = new Usuario(email, senha, '');
+    //print(_usuario.getEmail() + " ta indo");
+    //print(_usuario.getSenha());
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddItem()),
+      MaterialPageRoute(builder: (context) => ItemList()),
     );
   }
 
@@ -97,7 +103,10 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _entrar(emailController, passwordController);
+                        print(emailController.text);
+                        print(passwordController.text);
+                        _entrar(emailController.value.toString(),
+                            passwordController.value.toString());
                       }
                     },
                     child: Text(

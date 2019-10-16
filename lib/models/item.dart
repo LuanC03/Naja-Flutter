@@ -26,6 +26,7 @@
   }
 }*/
 import 'package:flutter/material.dart';
+import 'package:todo/itemView.dart';
 
 class Item extends StatelessWidget {
   var _id;
@@ -71,21 +72,21 @@ class Item extends StatelessWidget {
             width: 95.0,
             height: 95.0,
           ),
-          _getColumText(_nome, _quantidade, _preco),
+          _getColumText(_id, _nome, _quantidade, _preco),
         ],
       ),
       color: _getCorFundo(_quantidade),
     );
   }
 
-  Widget _getColumText(nome, quantidade, preco) {
+  Widget _getColumText(id, nome, quantidade, preco) {
     return new Expanded(
         child: new Container(
       margin: new EdgeInsets.all(10.0),
       child: new Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          _getNomeWidget(_nome, _quantidade),
+          _getNomeWidget(_id, _nome, _quantidade),
           _getQuantidadeWidget(_quantidade),
           _getPrecoWidget(_preco, _quantidade)
         ],
@@ -93,19 +94,36 @@ class Item extends StatelessWidget {
     ));
   }
 
-  Widget _getNomeWidget(String curencyName, String quantidade) {
-    return new Text(
-      curencyName,
-      maxLines: 1,
-      style: new TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 20.0,
-          color: _getCorLetra(quantidade)),
+  Widget _getNomeWidget(num id, String curencyName, String quantidade) {
+    return new Row(
+      children: <Widget>[
+        new Text(
+          curencyName,
+          maxLines: 1,
+          style: new TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 20.0,
+              color: _getCorLetra(quantidade)),
+        ),
+        RaisedButton(
+          onPressed: () {
+            Navigator.push(
+              _context,
+              MaterialPageRoute(builder: (_context) => ItemView(id)),
+            );
+          },
+          child: Text(
+            "Entrar",
+            style: TextStyle(color: Colors.orange, fontSize: 25.0),
+          ),
+          color: Colors.black,
+        )
+      ],
     );
   }
 
   Widget _getPrecoWidget(String preco, String quantidade) {
-    String precoFormatado = 'RS ' + preco;
+    String precoFormatado = 'R\$ ' + preco;
     return new Container(
       margin: new EdgeInsets.only(top: 5.0),
       child: new Text(

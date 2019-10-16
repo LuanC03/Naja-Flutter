@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
 
-class ItemView extends StatefulWidget {
-  var _id;
-  ItemView(num id) {
-    _id = id;
-  }
-
+class ItemEdit extends StatefulWidget {
   @override
-  State<StatefulWidget> createState() => _ItemViewState();
+  State<StatefulWidget> createState() => _ItemEditState();
 }
 
-class _ItemViewState extends State<ItemView> {
-  var id = widget._id;
+class _ItemEditState extends State<ItemEdit> {
+  TextEditingController nomeController = TextEditingController();
+  TextEditingController valorController = TextEditingController();
+  TextEditingController imageController = TextEditingController();
+  TextEditingController quantidadeController = TextEditingController();
+
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   void _resetFields() {
