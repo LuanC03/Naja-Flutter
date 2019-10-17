@@ -1,7 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:todo/addItem.dart';
 import 'package:todo/itemList.dart';
-import 'package:todo/models/user.dart';
+import 'package:todo/models/token.dart';
 
 class Login extends StatefulWidget {
   @override
@@ -9,9 +12,10 @@ class Login extends StatefulWidget {
 }
 
 class _LoginState extends State<Login> {
+  var url = 'https://najaweb.herokuapp.com/authenticate';
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
-  Usuario _usuario;
+  Token _token = new Token();
 
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
@@ -26,11 +30,36 @@ class _LoginState extends State<Login> {
     });
   }
 
-  void _entrar() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => ItemList()),
-    );
+  Future _getToken(email, senha) async {
+    Map data = {"email": email, "password": senha};
+    var body = json.encode(data);
+
+    var token;
+
+    try {
+      http.Response response = await http.post(url, body: body, headers: {
+        "Content-Type": "application/json",
+      });
+      const JsonDecoder decoder = const JsonDecoder();
+      token = decoder.convert(response.body);
+      print(token['token']);
+      return token;
+    } on Exception catch (_) {
+      return '';
+    }
+  }
+
+  _entrar(email, senha) async {
+    var token = await _getToken(email, senha);
+    _token.setToken(token);
+    if (token == '') {
+      print("deu errado");
+    } else {
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => ItemList()),
+      );
+    }
   }
 
   @override
@@ -100,7 +129,7 @@ class _LoginState extends State<Login> {
                   child: RaisedButton(
                     onPressed: () {
                       if (_formKey.currentState.validate()) {
-                        _entrar();
+                        _entrar(emailController.text, passwordController.text);
                       }
                     },
                     child: Text(

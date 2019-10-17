@@ -2,17 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:todo/itemApi.dart';
 import 'package:todo/menu.dart';
 import 'package:todo/models/item.dart';
+import 'package:todo/models/token.dart';
 
 class ItemList extends StatefulWidget {
-  final state = new _ItemListPageState();
-
   @override
-  _ItemListPageState createState() => state;
+  _ItemListPageState createState() => new _ItemListPageState();
 }
 
 class _ItemListPageState extends State<ItemList> {
   List _news = new List();
+  Token _token;
   var repository = new ItensApi();
+
+  _ItemListPageState();
 
   @override
   Widget build(BuildContext context) {

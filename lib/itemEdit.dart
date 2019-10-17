@@ -14,7 +14,6 @@ class ItemEdit extends StatefulWidget {
     this._quantidade = quantidade;
     this._preco = preco;
     this._nome = nome;
-    print(_nome);
   }
 
   @override
