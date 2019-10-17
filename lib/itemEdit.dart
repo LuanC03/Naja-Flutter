@@ -1,5 +1,9 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:todo/itemView.dart';
+import 'package:http/http.dart' as http;
 
 class ItemEdit extends StatefulWidget {
   var _id;
@@ -217,8 +221,11 @@ class _ItemEditState extends State<ItemEdit> {
             FlatButton(
               child: Text("Sim"),
               onPressed: () {
-                Navigator.pop(context);
-                Navigator.pop(context);
+                bool b = _deletarItem(_id) as bool;
+                if (b) {
+                  Navigator.pop(context);
+                  Navigator.pop(context);
+                }
               },
             ),
           ],
@@ -227,18 +234,52 @@ class _ItemEditState extends State<ItemEdit> {
     );
   }
 
-  void _salvarEdicao(
-      String nome, String valor, String img, String quantidade, id) {
-    print("nome: " + nome);
-    print("valor: " + valor);
-    print("img: " + img);
-    print("qtd: " + quantidade);
+  _salvarEdicao(nome, valor, img, quantidade, id) {
+    _atualizaItem(quantidade, id, _token);
+
     Navigator.push(
       context,
       MaterialPageRoute(
         builder: (context) =>
-            ItemView(_token, "1245", nome, quantidade, valor, img),
+            ItemView(_token, id, nome, quantidade, valor, img),
       ),
     );
+  }
+
+  Future<bool> _deletarItem(id) async {
+    var token = '';
+    try {
+      http.Response response = await http
+          .delete("https://najaweb.herokuapp.com/remove=$id", headers: {
+        HttpHeaders.authorizationHeader: "Bearer " + _token,
+        "Content-Type": "application/json",
+      });
+      const JsonDecoder decoder = const JsonDecoder();
+      token = decoder.convert(response.body);
+      print(token);
+      return true;
+    } on Exception catch (_) {
+      return false;
+    }
+  }
+}
+
+Future _atualizaItem(String quantidade, id, token) async {
+  Map data = {"_id": id, "quantidade_item": quantidade, "categoria_item": ''};
+
+  var body = json.encode(data);
+
+  try {
+    http.Response response = await http
+        .put('https://najaweb.herokuapp.com/atualiza', body: body, headers: {
+      HttpHeaders.authorizationHeader: "Bearer " + token,
+      "Content-Type": "application/json",
+    });
+    const JsonDecoder decoder = const JsonDecoder();
+    token = decoder.convert(response.body);
+    print(token);
+    return 'token';
+  } on Exception catch (_) {
+    return '';
   }
 }

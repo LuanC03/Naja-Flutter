@@ -40,7 +40,6 @@ class _LoginState extends State<Login> {
       });
       const JsonDecoder decoder = const JsonDecoder();
       token = decoder.convert(response.body);
-      print(token['token']);
       return token;
     } on Exception catch (_) {
       return '';

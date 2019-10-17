@@ -90,7 +90,6 @@ class _ItemListPageState extends State<ItemList> {
       });
       const JsonDecoder decoder = const JsonDecoder();
       var responseBody = decoder.convert(response.body);
-      print(responseBody);
       return responseBody;
     } on Exception catch (_) {
       return '';

@@ -157,7 +157,7 @@ class _ItemViewState extends State<ItemView> {
   }
 
   void _editarItem(id, nome, quantidade, preco, img) {
-    Navigator.pop(
+    Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) =>
