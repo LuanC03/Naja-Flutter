@@ -42,75 +42,80 @@ class _ItemViewState extends State<ItemView> {
   @override
   Widget build(BuildContext context) {
     this._context = context;
-    return Scaffold(
-      drawer: Menu(),
-      appBar: AppBar(
-        title: Text("NAJA",
-            style: TextStyle(
-              fontSize: 30,
-              fontFamily: "Arial Black",
-              color: Colors.orange,
-            )),
-        centerTitle: true,
-        backgroundColor: Colors.black,
-        actions: <Widget>[
-          FlatButton(
-            child: Text(
-              "Voltar",
+    return WillPopScope(
+      onWillPop: () {
+        _excluirItem(_id);
+      },
+      child: Scaffold(
+        drawer: Menu(),
+        appBar: AppBar(
+          title: Text("NAJA",
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 30,
+                fontFamily: "Arial Black",
                 color: Colors.orange,
+              )),
+          centerTitle: true,
+          backgroundColor: Colors.black,
+          actions: <Widget>[
+            FlatButton(
+              child: Text(
+                "Voltar",
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Colors.orange,
+                ),
               ),
-            ),
-            onPressed: _voltar,
-          )
-        ],
-      ),
-      backgroundColor: Colors.orange,
-      body: new Container(
-        padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-        width: 600,
-        height: 500,
-        child: new Material(
-          borderRadius: new BorderRadius.circular(6.0),
-          elevation: 2.0,
-          child: _getListTile(),
+              onPressed: _voltar,
+            )
+          ],
         ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: IconButton(
-              icon: Icon(
-                Icons.mode_edit,
-                color: Colors.orange,
-              ),
-              onPressed: () {
-                _editarItem(_id, _nome, _quantidade, _preco, _img);
-              },
-            ),
-            title: Text(
-              "Editar",
-              style: TextStyle(color: Colors.orange),
-            ),
+        backgroundColor: Colors.orange,
+        body: new Container(
+          padding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+          width: 600,
+          height: 500,
+          child: new Material(
+            borderRadius: new BorderRadius.circular(6.0),
+            elevation: 2.0,
+            child: _getListTile(),
           ),
-          BottomNavigationBarItem(
-            icon: IconButton(
-              onPressed: () {
-                _excluirItem(_id);
-              },
-              icon: Icon(
-                Icons.delete_outline,
-                color: Colors.orange,
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          items: <BottomNavigationBarItem>[
+            BottomNavigationBarItem(
+              icon: IconButton(
+                icon: Icon(
+                  Icons.mode_edit,
+                  color: Colors.orange,
+                ),
+                onPressed: () {
+                  _editarItem(_id, _nome, _quantidade, _preco, _img);
+                },
+              ),
+              title: Text(
+                "Editar",
+                style: TextStyle(color: Colors.orange),
               ),
             ),
-            title: Text(
-              "Excluir",
-              style: TextStyle(color: Colors.orange),
+            BottomNavigationBarItem(
+              icon: IconButton(
+                onPressed: () {
+                  _excluirItem(_id);
+                },
+                icon: Icon(
+                  Icons.delete_outline,
+                  color: Colors.orange,
+                ),
+              ),
+              title: Text(
+                "Excluir",
+                style: TextStyle(color: Colors.orange),
+              ),
             ),
-          ),
-        ],
-        backgroundColor: Colors.black,
+          ],
+          backgroundColor: Colors.black,
+        ),
       ),
     );
   }
@@ -148,14 +153,38 @@ class _ItemViewState extends State<ItemView> {
   }
 
   void _editarItem(id, nome, quantidade, preco, img) {
-    Navigator.push(
+    Navigator.pop(
       context,
       MaterialPageRoute(
           builder: (context) => ItemEdit(id, nome, quantidade, preco, img)),
     );
   }
 
-  void _excluirItem(id) {}
+  Future _excluirItem(id) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text("Tem Certeza que você quer Excluir o Item?"),
+          actions: <Widget>[
+            FlatButton(
+              child: Text("Cancelar"),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            FlatButton(
+              child: Text("Sim"),
+              onPressed: () {
+                Navigator.pop(context);
+                Navigator.pop(context);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
 }
 
 Widget _getColumText(nome, quantidade, preco) {
