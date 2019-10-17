@@ -7,18 +7,20 @@ class ItemEdit extends StatefulWidget {
   var _quantidade;
   var _preco;
   var _img;
+  var _token;
 
-  ItemEdit(id, nome, quantidade, preco, img) {
+  ItemEdit(token, id, nome, quantidade, preco, img) {
     this._img = img;
     this._id = id;
     this._quantidade = quantidade;
     this._preco = preco;
     this._nome = nome;
+    this._token = token;
   }
 
   @override
-  State<StatefulWidget> createState() => _ItemEditState(
-      this._id, this._nome, this._quantidade, this._preco, this._img);
+  State<StatefulWidget> createState() => _ItemEditState(this._token, this._id,
+      this._nome, this._quantidade, this._preco, this._img);
 }
 
 class _ItemEditState extends State<ItemEdit> {
@@ -27,13 +29,15 @@ class _ItemEditState extends State<ItemEdit> {
   var _quantidade;
   var _preco;
   var _img;
+  var _token;
 
   TextEditingController nomeController = TextEditingController();
   TextEditingController valorController = TextEditingController();
   TextEditingController imageController = TextEditingController();
   TextEditingController quantidadeController = TextEditingController();
 
-  _ItemEditState(id, nome, quantidade, preco, img) {
+  _ItemEditState(token, id, nome, quantidade, preco, img) {
+    this._token = token;
     this._img = img;
     this._id = id;
     this._quantidade = quantidade;
@@ -232,7 +236,8 @@ class _ItemEditState extends State<ItemEdit> {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => ItemView("1245", nome, quantidade, valor, img),
+        builder: (context) =>
+            ItemView(_token, "1245", nome, quantidade, valor, img),
       ),
     );
   }

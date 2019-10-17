@@ -61,6 +61,7 @@ class Menu extends StatelessWidget {
               Divider(),
               DrawerTile(Icons.home, "Início"),
               DrawerTile(Icons.list, "Produtos"),
+              DrawerTile(Icons.new_releases, "Novo Item"),
               DrawerTile(Icons.offline_bolt, "Log out"),
             ],
           ),

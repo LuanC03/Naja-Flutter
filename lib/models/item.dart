@@ -8,9 +8,10 @@ class Item extends StatelessWidget {
   var _quantidade;
   var _preco;
   var _categoria;
+  var _token;
 
-  Item(this._id, this._img, this._nome, this._quantidade, this._preco,
-      this._categoria);
+  Item(this._token, this._id, this._img, this._nome, this._quantidade,
+      this._preco, this._categoria);
 
   BuildContext _context;
 
@@ -51,8 +52,8 @@ class Item extends StatelessWidget {
               Navigator.push(
                 _context,
                 MaterialPageRoute(
-                    builder: (_context) =>
-                        ItemView(_id, _nome, _quantidade, _preco, _img)),
+                    builder: (_context) => ItemView(
+                        _token, _id, _nome, _quantidade, _preco, _img)),
               );
             },
             child: Text(

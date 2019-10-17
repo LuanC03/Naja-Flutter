@@ -9,17 +9,19 @@ class ItemView extends StatefulWidget {
   var _quantidade;
   var _preco;
   var _img;
+  var _token;
 
-  ItemView(id, nome, quantidade, preco, img) {
+  ItemView(token, id, nome, quantidade, preco, img) {
     this._img = img;
     this._id = id;
     this._quantidade = quantidade;
     this._preco = preco;
     this._nome = nome;
+    this._token = token;
   }
   @override
-  State<StatefulWidget> createState() => _ItemViewState(
-      this._id, this._nome, this._quantidade, this._preco, this._img);
+  State<StatefulWidget> createState() => _ItemViewState(this._token, this._id,
+      this._nome, this._quantidade, this._preco, this._img);
 }
 
 class _ItemViewState extends State<ItemView> {
@@ -28,13 +30,15 @@ class _ItemViewState extends State<ItemView> {
   var _quantidade;
   var _preco;
   var _img;
+  var _token;
 
-  _ItemViewState(id, nome, quantidade, preco, img) {
+  _ItemViewState(token, id, nome, quantidade, preco, img) {
     this._img = img;
     this._id = id;
     this._quantidade = quantidade;
     this._preco = preco;
     this._nome = nome;
+    this._token = token;
   }
 
   BuildContext _context;
@@ -148,7 +152,7 @@ class _ItemViewState extends State<ItemView> {
   void _voltar() {
     Navigator.pop(
       context,
-      MaterialPageRoute(builder: (context) => ItemList()),
+      MaterialPageRoute(builder: (context) => ItemList(_token)),
     );
   }
 
@@ -156,7 +160,8 @@ class _ItemViewState extends State<ItemView> {
     Navigator.pop(
       context,
       MaterialPageRoute(
-          builder: (context) => ItemEdit(id, nome, quantidade, preco, img)),
+          builder: (context) =>
+              ItemEdit(_token, id, nome, quantidade, preco, img)),
     );
   }
 

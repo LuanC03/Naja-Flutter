@@ -1,20 +1,30 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:todo/itemApi.dart';
 import 'package:todo/menu.dart';
 import 'package:todo/models/item.dart';
-import 'package:todo/models/token.dart';
+import 'package:http/http.dart' as http;
 
 class ItemList extends StatefulWidget {
+  var _token;
+  ItemList(token) {
+    this._token = token;
+  }
   @override
-  _ItemListPageState createState() => new _ItemListPageState();
+  _ItemListPageState createState() => new _ItemListPageState(this._token);
 }
 
 class _ItemListPageState extends State<ItemList> {
+  var url = 'https://najaweb.herokuapp.com/';
   List _news = new List();
-  Token _token;
   var repository = new ItensApi();
+  var _token;
 
-  _ItemListPageState();
+  _ItemListPageState(token) {
+    this._token = token;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -54,14 +64,36 @@ class _ItemListPageState extends State<ItemList> {
   }
 
   loadItens() async {
-    List result = await repository.loadAllItens();
+    List result = await _getItens();
 
     setState(() {
       result.forEach((i) {
-        var item = new Item(i['_id'], i['url_img'], i['nome'], i['quantidade'],
-            i['preco'], i['categoria']);
+        var item = new Item(
+            _token,
+            i['_id'],
+            /*i['url_img']*/ "https://pbs.twimg.com/profile_images/507251035929190400/BDUL3Uzt_400x400.png",
+            i['nome_item'],
+            i['quantidade_item'].toString(),
+            i['valor'].toString(),
+            i['categoria_item']);
         _news.add(item);
       });
     });
+  }
+
+  Future _getItens() async {
+    var token;
+
+    try {
+      http.Response response = await http.get(url, headers: {
+        "Content-Type": "application/json",
+      });
+      const JsonDecoder decoder = const JsonDecoder();
+      var responseBody = decoder.convert(response.body);
+      print(responseBody);
+      return responseBody;
+    } on Exception catch (_) {
+      return '';
+    }
   }
 }
